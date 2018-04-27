@@ -1,0 +1,73 @@
+
+$include /etc/Inputrc
+
+
+
+set editing-mode emacs 
+
+
+
+C-q: quoted-insert
+
+
+
+TAB: complete
+
+# Shift-Tab
+"\e[Z": menu-complete
+
+# Macros that are convenient for shell interaction
+$if Bash
+# edit the path
+"\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
+# prepare to type a quoted word --
+# insert open and close double quotes
+# and move to just after the open quote
+"\C-x\"": "\"\"\C-b"
+# insert a backslash (testing backslash escapes
+# in sequences and macros)
+"\C-x\\": "\\"
+# Quote the current or previous word
+"\C-xq": "\eb\"\ef\""
+# Add a binding to refresh the line, which is unbound
+"\C-xr": redraw-current-line
+
+"\e[1;3C": forward-word
+"\e[1;3D": backward-word
+
+# Undo directory change
+"\ez": 'cd -\015'
+
+"\C-x\C-k": kill-whole-line
+
+"\e\C-f": dump-functions
+"\e\C-v": dump-variables
+"\e\C-m": dump-macros
+"\e\C-k": "bind -P\n"
+
+"\C-xc": "exit\n"
+$endif
+
+# use a visible bell if one is available
+set bell-style visible
+
+# don't strip characters to 7 bits when reading
+set input-meta on
+
+# allow iso-latin1 characters to be inserted rather
+# than converted to prefix-meta sequences
+set convert-meta off
+
+# display characters with the eighth bit set directly
+# rather than as meta-prefixed characters
+set output-meta on
+
+# if there are more than 150 possible completions for
+# a word, ask the user if he wants to see all of them
+set completion-query-items 150
+
+set blink-matching-paren on
+set colored-completion-prefix on
+set colored-stats on
+set history-preserve-point on
+set visible-stats on
