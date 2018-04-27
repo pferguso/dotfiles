@@ -39,14 +39,17 @@ shopt -s cmdhist
 shopt -s histappend histreedit histverify
 shopt -s extglob
 shopt -s hostcomplete
-
+shopt -s execfail
 
 
 shopt -u mailwarn
 unset MAILCHECK        
 
 
-
+export TIMEFORMAT=$'\nreal %3R\tuser %3U\tsys %3S\tpcpu %P\n'
+export HISTIGNORE="&:bg:fg:ll:h"
+export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
+export HISTCONTROL=ignoredups
 
 
 #-------------------------------------------------------------
@@ -92,6 +95,11 @@ ALERT=${BWhite}${On_Red} # Bold White on red background
 
 
 
+#-------------------------------------------------------------
+# PATH
+#-------------------------------------------------------------
+
+PATH=.:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 #-------------------------------------------------------------
 # Aliases
@@ -146,6 +154,27 @@ alias moer='more'
 alias grep='grep --color=auto'
 
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+#-------------------------------------------------------------
+# Functions
+#-------------------------------------------------------------
+
+gps() {
+
+  local psargs='-efw'
+  
+  if [ -z "$1" ]; then
+    ps $psargs
+  else       
+    echo "-- Searching for \"$1\" in all running processes --"
+    echo "UID        PID  PPID  C STIME TTY          TIME CMD"
+    ps $psargs | grep "$1" | grep -v grep
+    echo "----------------------------------------------------"
+  fi
+}
+
+
 
 #-------------------------------------------------------------
 # Less
@@ -214,19 +243,9 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte.sh; fi
 [ -z "$BASH_ENV" ] && export BASH_ENV=".bashrc"
 
 # Source local definitions
-[ -f $BASH_ENV.${hname} ] && . $BASH_ENV.${hname}
+[ -f $HOME/$BASH_ENV.${hname} ] && . $HOME/$BASH_ENV.${hname}
 
 
-# set PATH
-[ -f $HOME/.setpath ] && . $HOME/.setpath
-
-
-# get aliases
-[ -f $HOME/.aliases ] && . $HOME/.aliases
-
-
-# get functions
-[ -f $HOME/.functions ] && . $HOME/.functions
 
 
 
