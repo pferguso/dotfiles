@@ -43,7 +43,7 @@ shopt -s execfail
 
 
 shopt -u mailwarn
-unset MAILCHECK        
+unset MAILCHECK
 
 
 export TIMEFORMAT=$'\nreal %3R\tuser %3U\tsys %3S\tpcpu %P\n'
@@ -100,6 +100,7 @@ ALERT=${BWhite}${On_Red} # Bold White on red background
 #-------------------------------------------------------------
 
 PATH=.:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH
 
 #-------------------------------------------------------------
 # Aliases
@@ -203,7 +204,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 #-------------------------------------------------------------
 
 export EDITOR=vi
-export ALTERNATE_EDITOR="emacs +%d %s"
+export ALTERNATE_EDITOR=emacs
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
@@ -213,8 +214,14 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # Prompt
 #-------------------------------------------------------------
 
-[[ $- = *i* && -z "$LP_USER" && -d ~/liquidprompt  ]] && source ~/liquidprompt/liquidprompt
-
+if [[ $- = *i* && -z "$LP_USER" && -d ~/liquidprompt  ]] ; then
+    source ~/liquidprompt/liquidprompt
+elif [ -f $HOME/.bashprompts ]; then
+    . $HOME/.bashprompts
+    regprompt
+else
+    PS1="\[\e]2;\h:\W\007\e[1;34m\]-(\u@\h)-(\w)\n-(\$(date +%H%M))- \[\e[0m\]"
+fi
 
 #-------------------------------------------------------------
 # Bash completions
