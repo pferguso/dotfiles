@@ -99,9 +99,11 @@ SEP="----------------------------------------------------"
 # PATH
 #-------------------------------------------------------------
 
-PATH=.:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-export PATH
-
+# Don't screw up PATH if set for oracle user
+if [ -z "$FND_TOP" ]; then
+    PATH=.:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+    export PATH
+fi
 #-------------------------------------------------------------
 # Aliases
 #-------------------------------------------------------------
