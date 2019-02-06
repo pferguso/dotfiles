@@ -93,7 +93,7 @@ NC="\e[m"               # Color Reset
 
 ALERT=${BWhite}${On_Red} # Bold White on red background
 
-
+SEP="----------------------------------------------------"
 
 #-------------------------------------------------------------
 # PATH
@@ -164,14 +164,14 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 gps() {
 
   local psargs='-efw'
-  
+
   if [ -z "$1" ]; then
     ps $psargs
-  else       
+  else
     echo "-- Searching for \"$1\" in all running processes --"
     echo "UID        PID  PPID  C STIME TTY          TIME CMD"
     ps $psargs | grep "$1" | grep -v grep
-    echo "----------------------------------------------------"
+    echo $SEP
   fi
 }
 
@@ -179,6 +179,34 @@ gps() {
 function mk() {
   mkdir -p "$@" && cd "$@"
 }
+
+
+function ep() {
+     printf "\n${BRed}Displaying PATH:${NC}\n$SEP\n\n"
+     echo $PATH |tr ':' '\n'
+     echo
+ }
+
+ function elp() {
+     printf "\n${BRed}Displaying LD_LIBRARY_PATH:${NC}\n$SEP\n\n"
+     echo $LD_LIBRARY_PATH |tr ':' '\n'
+     echo
+ }
+
+ function ap() {
+     local np=$1
+     printf "\nAdding $np to \$PATH ...\n"
+     export PATH=$PATH:$np
+     ep
+ }
+
+  function alp() {
+     local np=$1
+     printf "\nAdding $np to \$LD_LIBRARY_PATH ...\n"
+     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$np
+     elp
+  }
+
 
 #-------------------------------------------------------------
 # Less
@@ -241,7 +269,7 @@ fi
 # Tilix fix
 #-------------------------------------------------------------
 
-if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte.sh; fi 
+if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte.sh; fi
 
 
 #-------------------------------------------------------------
