@@ -200,12 +200,34 @@ function ep() {
      ep
  }
 
-  function alp() {
+ function alp() {
      local np=$1
      printf "\nAdding $np to \$LD_LIBRARY_PATH ...\n"
      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$np
      elp
+ }
+
+
+function getenv() {
+
+  local pid=$1
+  local envname=$2
+
+  [ -z "$pid" ] && printf "\ngetenv PID [ENV]\n\n" && return 0 
+  [ -z "$envname" ] && {
+      cat /proc/$pid/environ |strings |sort
+      return 0
   }
+
+  val=$(cat /proc/$pid/environ |strings |grep $envname)
+
+  [ -z "$val" ] && printf "\nEnvironment variable $envname not found in process $pid\n\n" && return 0 
+  printf "\nSearching for environment variable $envname in process $pid:\n"
+  printf "%s\n\n" "$val"
+
+
+}
+
 
 
 #-------------------------------------------------------------
