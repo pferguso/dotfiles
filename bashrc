@@ -238,9 +238,15 @@ function getenv() {
 
 alias more='less'
 export PAGER=less
-export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
-export LESS='-i -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
+if [ -d "$HOME/source-highlight" ]; then
+     export LESSOPEN="|$HOME/source-highlight/bin/src-hilite-lesspipe.sh %s"
+     export LESS='-eMiR'
+     export PATH=$PATH:$HOME/source-highlight/bin
+else
+     export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
+     export LESS='-i -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
 :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+fi
 
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
